@@ -1,0 +1,6 @@
+Analyzing add_reward_modal.dart...
+
+warning - add_reward_modal.dart:19:22 - The value of the field '_currencyFormatter' isn't used. Try removing the field, or using it. - unused_field
+   info - add_reward_modal.dart:177:65 - 'RegExp' is deprecated and shouldn't be used. This class will become 'final' in a future release. 'Pattern' may be a more appropriate interface to implement. Try replacing the use of the deprecated member with the replacement. - deprecated_member_use
+
+2 issues found.

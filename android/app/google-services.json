@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "629808406364",
+    "project_id": "quit-smoking-tracker-fayy",
+    "storage_bucket": "quit-smoking-tracker-fayy.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:629808406364:android:46c2c70cb5a539f3d42b99",
+        "android_client_info": {
+          "package_name": "com.example.quit_smoking_tracker"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCPEfiyg8_bu8Olsgr6XQLa-fNEp__e6c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
