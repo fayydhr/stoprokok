@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:intl/intl.dart';
 import '../../../core/constants/app_colors.dart';
 import '../viewmodels/dashboard_viewmodel.dart';
 
@@ -13,9 +14,13 @@ class LogSlipModal extends ConsumerStatefulWidget {
 class _LogSlipModalState extends ConsumerState<LogSlipModal> {
   int _slipCount = 1;
   bool _isLoading = false;
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
+    final userAsync = ref.watch(userStreamProvider);
+    final user = userAsync.value;
+    final firstDate = user?.quitDate ?? DateTime.now().subtract(const Duration(days: 365 * 5));
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundDark,
@@ -135,6 +140,95 @@ class _LogSlipModalState extends ConsumerState<LogSlipModal> {
                   ),
                 ],
               ),
+              const SizedBox(height: 24),
+
+              // Date Selection
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.05),
+                  border: Border.all(color: AppColors.primary.withOpacity(0.1)),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.calendar_today, color: AppColors.primary.withOpacity(0.7), size: 20),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'TANGGAL KEJADIAN',
+                              style: TextStyle(
+                                color: AppColors.slate400,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.0,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            Text(
+                              _selectedDate.year == DateTime.now().year && _selectedDate.month == DateTime.now().month && _selectedDate.day == DateTime.now().day
+                                  ? 'Hari Ini'
+                                  : DateFormat('dd MMM yyyy').format(_selectedDate),
+                              style: const TextStyle(
+                                color: AppColors.slate200,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        backgroundColor: AppColors.primary.withOpacity(0.1),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                      ),
+                      onPressed: () async {
+                        final now = DateTime.now();
+                        final picked = await showDatePicker(
+                          context: context,
+                          initialDate: _selectedDate,
+                          firstDate: firstDate,
+                          lastDate: now,
+                          builder: (context, child) {
+                            return Theme(
+                              data: Theme.of(context).copyWith(
+                                colorScheme: const ColorScheme.dark(
+                                  primary: AppColors.primary,
+                                  onPrimary: AppColors.backgroundDark,
+                                  surface: AppColors.slate900,
+                                  onSurface: Colors.white,
+                                ),
+                              ),
+                              child: child!,
+                            );
+                          },
+                        );
+                        if (picked != null && picked != _selectedDate) {
+                          setState(() {
+                            _selectedDate = picked;
+                          });
+                        }
+                      },
+                      child: const Text(
+                        'Ubah',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               const SizedBox(height: 32),
 
               // Abstract Visual Quote
@@ -184,7 +278,7 @@ class _LogSlipModalState extends ConsumerState<LogSlipModal> {
                   ),
                   onPressed: _isLoading ? null : () async {
                     setState(() => _isLoading = true);
-                    await ref.read(dashboardActionsProvider).logSlips(_slipCount);
+                    await ref.read(dashboardActionsProvider).logSlips(_slipCount, date: _selectedDate);
                     if (context.mounted) {
                       Navigator.of(context).pop();
                     }

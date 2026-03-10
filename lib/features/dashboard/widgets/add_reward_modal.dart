@@ -5,19 +5,50 @@ import '../viewmodels/dashboard_viewmodel.dart';
 import 'package:intl/intl.dart';
 
 class AddRewardModal extends ConsumerStatefulWidget {
-  const AddRewardModal({super.key});
+  final int? index;
+  final String? initialName;
+  final double? initialPrice;
+
+  const AddRewardModal({
+    super.key,
+    this.index,
+    this.initialName,
+    this.initialPrice,
+  });
 
   @override
   ConsumerState<AddRewardModal> createState() => _AddRewardModalState();
 }
 
 class _AddRewardModalState extends ConsumerState<AddRewardModal> {
-  String _itemName = '';
-  double _targetPrice = 0.0;
+  late String _itemName;
+  late double _targetPrice;
+  late TextEditingController _nameController;
+  late TextEditingController _priceController;
   bool _isLoading = false;
 
   @override
+  void initState() {
+    super.initState();
+    _itemName = widget.initialName ?? '';
+    _targetPrice = widget.initialPrice ?? 0.0;
+    
+    _nameController = TextEditingController(text: _itemName);
+    _priceController = TextEditingController(
+      text: _targetPrice > 0 ? _targetPrice.toInt().toString() : '',
+    );
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _priceController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isEditing = widget.index != null;
     return Container(
       decoration: BoxDecoration(
         color: AppColors.backgroundDark,
@@ -61,9 +92,9 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
               ),
 
               // Title
-              const Text(
-                'Add Reward Goal',
-                style: TextStyle(
+              Text(
+                isEditing ? 'Edit Reward Goal' : 'Add Reward Goal',
+                style: const TextStyle(
                   color: AppColors.slate100,
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -106,6 +137,7 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Center(
                         child: TextFormField(
+                          controller: _nameController,
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -113,7 +145,7 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
                           ),
                           decoration: InputDecoration(
                             hintText: 'e.g. Flight to Bali',
-                            hintStyle: TextStyle(color: AppColors.slate500.withValues(alpha: 0.5)),
+                            hintStyle: TextStyle(color: AppColors.slate500.withOpacity(0.5)),
                             border: InputBorder.none,
                           ),
                           onChanged: (val) {
@@ -158,6 +190,7 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
                         ),
                         Expanded(
                           child: TextFormField(
+                            controller: _priceController,
                             keyboardType: TextInputType.number,
                             style: const TextStyle(
                               color: Colors.white,
@@ -166,7 +199,7 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
                             ),
                             decoration: InputDecoration(
                               hintText: '0',
-                              hintStyle: TextStyle(color: AppColors.slate500.withValues(alpha: 0.5)),
+                              hintStyle: TextStyle(color: AppColors.slate500.withOpacity(0.5)),
                               border: InputBorder.none,
                             ),
                             onChanged: (val) {
@@ -186,6 +219,58 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
               const SizedBox(height: 48),
 
               // Action Buttons
+              if (isEditing) ...[
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: TextButton.icon(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.redAccent,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: _isLoading ? null : () async {
+                      // Confirm dialog before removing
+                      final confirm = await showDialog<bool>(
+                        context: context,
+                        builder: (ctx) => AlertDialog(
+                          backgroundColor: AppColors.slate900,
+                          title: const Text('Remove Goal?', style: TextStyle(color: Colors.white)),
+                          content: const Text(
+                            'Are you sure you want to delete this reward goal?',
+                            style: TextStyle(color: AppColors.slate300),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(false),
+                              child: const Text('Cancel', style: TextStyle(color: AppColors.slate400)),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(ctx).pop(true),
+                              child: const Text('Delete', style: TextStyle(color: Colors.redAccent)),
+                            ),
+                          ],
+                        ),
+                      );
+
+                      if (confirm == true) {
+                        setState(() => _isLoading = true);
+                        await ref.read(dashboardActionsProvider).removeSavingsTarget(widget.index!);
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      }
+                    },
+                    icon: const Icon(Icons.delete_outline),
+                    label: const Text(
+                      'Delete Goal',
+                      style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -197,25 +282,29 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     elevation: 10,
-                    shadowColor: AppColors.primary.withValues(alpha: 0.3),
+                    shadowColor: AppColors.primary.withOpacity(0.3),
                   ),
                   onPressed: _isLoading || _itemName.isEmpty || _targetPrice <= 0 ? null : () async {
                     setState(() => _isLoading = true);
-                    await ref.read(dashboardActionsProvider).updateSavingsTarget(_itemName, _targetPrice);
+                    if (isEditing) {
+                      await ref.read(dashboardActionsProvider).editSavingsTarget(widget.index!, _itemName, _targetPrice);
+                    } else {
+                      await ref.read(dashboardActionsProvider).updateSavingsTarget(_itemName, _targetPrice);
+                    }
                     if (context.mounted) {
                       Navigator.of(context).pop();
                     }
                   },
                   child: _isLoading 
                       ? const CircularProgressIndicator(color: AppColors.backgroundDark) 
-                      : const Row(
+                      : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.check_circle_outline, size: 24, color: AppColors.backgroundDark),
-                            SizedBox(width: 8),
+                            const Icon(Icons.check_circle_outline, size: 24, color: AppColors.backgroundDark),
+                            const SizedBox(width: 8),
                             Text(
-                              'Save Reward Goal',
-                              style: TextStyle(
+                              isEditing ? 'Update Reward Goal' : 'Save Reward Goal',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                               ),

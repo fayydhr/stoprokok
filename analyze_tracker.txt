@@ -1,0 +1,93 @@
+Analyzing quit_smoking_tracker...                               
+
+warning - Unused import: '../../../data/models/user_model.dart' - lib\features\craving_kit\viewmodels\craving_kit_viewmodel.dart:3:8 - unused_import
+   info - Don't invoke 'print' in production code - lib\features\craving_kit\viewmodels\craving_kit_viewmodel.dart:60:7 - avoid_print
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\craving_kit\views\craving_kit_screen.dart:274:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\craving_kit\views\craving_kit_screen.dart:278:64 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\cigarette_log_screen.dart:156:11 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\dashboard\views\cigarette_log_screen.dart:158:23 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\cigarette_log_screen.dart:159:15 - prefer_const_constructors
+   info - Use 'const' for final variables initialized to a constant value - lib\features\dashboard\views\cigarette_log_screen.dart:232:7 - prefer_const_declarations
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:65:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:66:60 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:133:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:227:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:232:31 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\dashboard_screen.dart:253:11 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\dashboard\views\dashboard_screen.dart:255:23 - prefer_const_literals_to_create_immutables
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:455:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:463:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:515:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:551:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:595:50 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:643:47 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:716:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:718:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:769:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\dashboard_screen.dart:811:65 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:75:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:80:36 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:88:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:110:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:137:33 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:142:55 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:145:40 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:178:48 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\money_tracker_screen.dart:220:13 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\dashboard\views\money_tracker_screen.dart:221:25 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\money_tracker_screen.dart:224:17 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\money_tracker_screen.dart:226:26 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\money_tracker_screen.dart:266:11 - prefer_const_constructors
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:302:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:338:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:361:67 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:366:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:398:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:413:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:455:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:467:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\views\money_tracker_screen.dart:570:41 - deprecated_member_use
+warning - The value of the local variable 'd' isn't used - lib\features\dashboard\views\money_tracker_screen.dart:653:15 - unused_local_variable
+   info - Use 'const' for final variables initialized to a constant value - lib\features\dashboard\views\money_tracker_screen.dart:654:9 - prefer_const_declarations
+   info - Use 'const' for final variables initialized to a constant value - lib\features\dashboard\views\money_tracker_screen.dart:667:7 - prefer_const_declarations
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\money_tracker_screen.dart:708:20 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\money_tracker_screen.dart:743:23 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\dashboard\views\money_tracker_screen.dart:744:25 - prefer_const_constructors
+warning - Unused import: 'package:intl/intl.dart' - lib\features\dashboard\widgets\add_reward_modal.dart:5:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:24:52 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:38:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:50:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:52:63 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:99:48 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:100:67 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:129:54 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:149:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:151:41 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:155:63 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\log_slip_modal.dart:183:52 - deprecated_member_use
+warning - Unused import: '../../../data/models/user_model.dart' - lib\features\dashboard\widgets\savings_history_modal.dart:5:8 - unused_import
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\savings_history_modal.dart:184:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\dashboard\widgets\savings_history_modal.dart:185:57 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:97:46 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:99:65 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:118:42 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:180:44 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:209:52 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\onboarding\views\onboarding_screen.dart:230:25 - prefer_const_constructors
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:290:38 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:342:30 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:344:49 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:367:43 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:515:55 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:515:88 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:518:73 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:583:34 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:681:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:682:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:687:37 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:757:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:758:35 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\onboarding\views\onboarding_screen.dart:763:37 - deprecated_member_use
+warning - The value of the local variable 'prefs' isn't used - lib\main.dart:18:9 - unused_local_variable
+
+89 issues found. (ran in 3.0s)

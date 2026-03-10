@@ -5,6 +5,7 @@ import '../viewmodels/dashboard_viewmodel.dart';
 import '../../../data/models/user_model.dart';
 import '../../../core/constants/app_colors.dart';
 import '../widgets/log_slip_modal.dart';
+import 'cigarette_log_screen.dart';
 import 'money_tracker_screen.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -38,8 +39,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             children: [
               _DashboardContent(user: user),
               const MoneyTrackerScreen(),
-              // Placeholder for Groups
-              const Center(child: Text('Groups', style: TextStyle(color: Colors.white))),
+              const CigaretteLogScreen(), // Replaced Groups with CigaretteLogScreen
               // Placeholder for Profile
               const Center(child: Text('Profile', style: TextStyle(color: Colors.white))),
             ],
@@ -89,8 +89,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ),
                   const SizedBox(width: 56), // Space for Add button
                   _NavBarItem(
-                    icon: Icons.groups_outlined, // Changed to outline like HTML
-                    label: 'Social', // Changed from Groups to Social based on HTML
+                    icon: Icons.smoking_rooms, // Changed from Groups outline to Smoking rooms
+                    label: 'Rokok', // Changed from Social to Rokok
                     isSelected: _currentIndex == 2,
                     onTap: () => setState(() => _currentIndex = 2),
                   ),
@@ -275,6 +275,20 @@ class _DashboardContent extends ConsumerWidget {
         ],
       ),
       actions: [
+        // DEBUG TOOL - Remove when not testing
+        Consumer(
+          builder: (context, ref, child) {
+            return TextButton(
+              onPressed: () {
+                ref.read(dashboardActionsProvider).debugFastForward();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Time fast-forwarded 7 days!')),
+                );
+              },
+              child: const Text('+7 Hari', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold, fontSize: 10)),
+            );
+          },
+        ),
         Padding(
           padding: const EdgeInsets.only(right: 16.0),
           child: Container(
@@ -283,7 +297,7 @@ class _DashboardContent extends ConsumerWidget {
             decoration: BoxDecoration(
               color: AppColors.slateCard,
               shape: BoxShape.circle,
-              border: Border.all(color: Colors.white.withOpacity(0.1)),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
             child: IconButton(
               icon: const Icon(Icons.settings, color: Colors.white, size: 20),

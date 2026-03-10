@@ -477,6 +477,7 @@ mixin _$SmokingProfile {
   int get cigarettesPerPack => throw _privateConstructorUsedError;
   int get cigarettesPerDay => throw _privateConstructorUsedError;
   int get yearsSmoking => throw _privateConstructorUsedError;
+  Map<String, dynamic> get profileHistory => throw _privateConstructorUsedError;
 
   /// Serializes this SmokingProfile to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -500,7 +501,8 @@ abstract class $SmokingProfileCopyWith<$Res> {
       double pricePerPack,
       int cigarettesPerPack,
       int cigarettesPerDay,
-      int yearsSmoking});
+      int yearsSmoking,
+      Map<String, dynamic> profileHistory});
 }
 
 /// @nodoc
@@ -524,6 +526,7 @@ class _$SmokingProfileCopyWithImpl<$Res, $Val extends SmokingProfile>
     Object? cigarettesPerPack = null,
     Object? cigarettesPerDay = null,
     Object? yearsSmoking = null,
+    Object? profileHistory = null,
   }) {
     return _then(_value.copyWith(
       brand: null == brand
@@ -550,6 +553,10 @@ class _$SmokingProfileCopyWithImpl<$Res, $Val extends SmokingProfile>
           ? _value.yearsSmoking
           : yearsSmoking // ignore: cast_nullable_to_non_nullable
               as int,
+      profileHistory: null == profileHistory
+          ? _value.profileHistory
+          : profileHistory // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ) as $Val);
   }
 }
@@ -568,7 +575,8 @@ abstract class _$$SmokingProfileImplCopyWith<$Res>
       double pricePerPack,
       int cigarettesPerPack,
       int cigarettesPerDay,
-      int yearsSmoking});
+      int yearsSmoking,
+      Map<String, dynamic> profileHistory});
 }
 
 /// @nodoc
@@ -590,6 +598,7 @@ class __$$SmokingProfileImplCopyWithImpl<$Res>
     Object? cigarettesPerPack = null,
     Object? cigarettesPerDay = null,
     Object? yearsSmoking = null,
+    Object? profileHistory = null,
   }) {
     return _then(_$SmokingProfileImpl(
       brand: null == brand
@@ -616,6 +625,10 @@ class __$$SmokingProfileImplCopyWithImpl<$Res>
           ? _value.yearsSmoking
           : yearsSmoking // ignore: cast_nullable_to_non_nullable
               as int,
+      profileHistory: null == profileHistory
+          ? _value._profileHistory
+          : profileHistory // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
     ));
   }
 }
@@ -629,7 +642,9 @@ class _$SmokingProfileImpl implements _SmokingProfile {
       this.pricePerPack = 0,
       this.cigarettesPerPack = 0,
       this.cigarettesPerDay = 0,
-      this.yearsSmoking = 0});
+      this.yearsSmoking = 0,
+      final Map<String, dynamic> profileHistory = const <String, dynamic>{}})
+      : _profileHistory = profileHistory;
 
   factory _$SmokingProfileImpl.fromJson(Map<String, dynamic> json) =>
       _$$SmokingProfileImplFromJson(json);
@@ -652,10 +667,18 @@ class _$SmokingProfileImpl implements _SmokingProfile {
   @override
   @JsonKey()
   final int yearsSmoking;
+  final Map<String, dynamic> _profileHistory;
+  @override
+  @JsonKey()
+  Map<String, dynamic> get profileHistory {
+    if (_profileHistory is EqualUnmodifiableMapView) return _profileHistory;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_profileHistory);
+  }
 
   @override
   String toString() {
-    return 'SmokingProfile(brand: $brand, variant: $variant, pricePerPack: $pricePerPack, cigarettesPerPack: $cigarettesPerPack, cigarettesPerDay: $cigarettesPerDay, yearsSmoking: $yearsSmoking)';
+    return 'SmokingProfile(brand: $brand, variant: $variant, pricePerPack: $pricePerPack, cigarettesPerPack: $cigarettesPerPack, cigarettesPerDay: $cigarettesPerDay, yearsSmoking: $yearsSmoking, profileHistory: $profileHistory)';
   }
 
   @override
@@ -672,13 +695,22 @@ class _$SmokingProfileImpl implements _SmokingProfile {
             (identical(other.cigarettesPerDay, cigarettesPerDay) ||
                 other.cigarettesPerDay == cigarettesPerDay) &&
             (identical(other.yearsSmoking, yearsSmoking) ||
-                other.yearsSmoking == yearsSmoking));
+                other.yearsSmoking == yearsSmoking) &&
+            const DeepCollectionEquality()
+                .equals(other._profileHistory, _profileHistory));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, brand, variant, pricePerPack,
-      cigarettesPerPack, cigarettesPerDay, yearsSmoking);
+  int get hashCode => Object.hash(
+      runtimeType,
+      brand,
+      variant,
+      pricePerPack,
+      cigarettesPerPack,
+      cigarettesPerDay,
+      yearsSmoking,
+      const DeepCollectionEquality().hash(_profileHistory));
 
   /// Create a copy of SmokingProfile
   /// with the given fields replaced by the non-null parameter values.
@@ -704,7 +736,8 @@ abstract class _SmokingProfile implements SmokingProfile {
       final double pricePerPack,
       final int cigarettesPerPack,
       final int cigarettesPerDay,
-      final int yearsSmoking}) = _$SmokingProfileImpl;
+      final int yearsSmoking,
+      final Map<String, dynamic> profileHistory}) = _$SmokingProfileImpl;
 
   factory _SmokingProfile.fromJson(Map<String, dynamic> json) =
       _$SmokingProfileImpl.fromJson;
@@ -721,6 +754,8 @@ abstract class _SmokingProfile implements SmokingProfile {
   int get cigarettesPerDay;
   @override
   int get yearsSmoking;
+  @override
+  Map<String, dynamic> get profileHistory;
 
   /// Create a copy of SmokingProfile
   /// with the given fields replaced by the non-null parameter values.
@@ -934,6 +969,7 @@ mixin _$ProgressSummary {
   int get relapseCount => throw _privateConstructorUsedError;
   int get totalSlips => throw _privateConstructorUsedError;
   int get todaySlips => throw _privateConstructorUsedError;
+  Map<String, dynamic> get slipHistory => throw _privateConstructorUsedError;
   @TimestampConverter()
   DateTime? get lastSlipDate => throw _privateConstructorUsedError;
   @TimestampConverter()
@@ -964,6 +1000,7 @@ abstract class $ProgressSummaryCopyWith<$Res> {
       int relapseCount,
       int totalSlips,
       int todaySlips,
+      Map<String, dynamic> slipHistory,
       @TimestampConverter() DateTime? lastSlipDate,
       @TimestampConverter() DateTime? lastCheckInDate});
 }
@@ -991,6 +1028,7 @@ class _$ProgressSummaryCopyWithImpl<$Res, $Val extends ProgressSummary>
     Object? relapseCount = null,
     Object? totalSlips = null,
     Object? todaySlips = null,
+    Object? slipHistory = null,
     Object? lastSlipDate = freezed,
     Object? lastCheckInDate = freezed,
   }) {
@@ -1027,6 +1065,10 @@ class _$ProgressSummaryCopyWithImpl<$Res, $Val extends ProgressSummary>
           ? _value.todaySlips
           : todaySlips // ignore: cast_nullable_to_non_nullable
               as int,
+      slipHistory: null == slipHistory
+          ? _value.slipHistory
+          : slipHistory // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
       lastSlipDate: freezed == lastSlipDate
           ? _value.lastSlipDate
           : lastSlipDate // ignore: cast_nullable_to_non_nullable
@@ -1056,6 +1098,7 @@ abstract class _$$ProgressSummaryImplCopyWith<$Res>
       int relapseCount,
       int totalSlips,
       int todaySlips,
+      Map<String, dynamic> slipHistory,
       @TimestampConverter() DateTime? lastSlipDate,
       @TimestampConverter() DateTime? lastCheckInDate});
 }
@@ -1081,6 +1124,7 @@ class __$$ProgressSummaryImplCopyWithImpl<$Res>
     Object? relapseCount = null,
     Object? totalSlips = null,
     Object? todaySlips = null,
+    Object? slipHistory = null,
     Object? lastSlipDate = freezed,
     Object? lastCheckInDate = freezed,
   }) {
@@ -1117,6 +1161,10 @@ class __$$ProgressSummaryImplCopyWithImpl<$Res>
           ? _value.todaySlips
           : todaySlips // ignore: cast_nullable_to_non_nullable
               as int,
+      slipHistory: null == slipHistory
+          ? _value._slipHistory
+          : slipHistory // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
       lastSlipDate: freezed == lastSlipDate
           ? _value.lastSlipDate
           : lastSlipDate // ignore: cast_nullable_to_non_nullable
@@ -1141,8 +1189,10 @@ class _$ProgressSummaryImpl implements _ProgressSummary {
       this.relapseCount = 0,
       this.totalSlips = 0,
       this.todaySlips = 0,
+      final Map<String, dynamic> slipHistory = const <String, dynamic>{},
       @TimestampConverter() this.lastSlipDate,
-      @TimestampConverter() this.lastCheckInDate});
+      @TimestampConverter() this.lastCheckInDate})
+      : _slipHistory = slipHistory;
 
   factory _$ProgressSummaryImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProgressSummaryImplFromJson(json);
@@ -1171,6 +1221,15 @@ class _$ProgressSummaryImpl implements _ProgressSummary {
   @override
   @JsonKey()
   final int todaySlips;
+  final Map<String, dynamic> _slipHistory;
+  @override
+  @JsonKey()
+  Map<String, dynamic> get slipHistory {
+    if (_slipHistory is EqualUnmodifiableMapView) return _slipHistory;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_slipHistory);
+  }
+
   @override
   @TimestampConverter()
   final DateTime? lastSlipDate;
@@ -1180,7 +1239,7 @@ class _$ProgressSummaryImpl implements _ProgressSummary {
 
   @override
   String toString() {
-    return 'ProgressSummary(currentStreak: $currentStreak, longestStreak: $longestStreak, totalMoneySaved: $totalMoneySaved, cigarettesAvoided: $cigarettesAvoided, totalDaysSmokeFree: $totalDaysSmokeFree, relapseCount: $relapseCount, totalSlips: $totalSlips, todaySlips: $todaySlips, lastSlipDate: $lastSlipDate, lastCheckInDate: $lastCheckInDate)';
+    return 'ProgressSummary(currentStreak: $currentStreak, longestStreak: $longestStreak, totalMoneySaved: $totalMoneySaved, cigarettesAvoided: $cigarettesAvoided, totalDaysSmokeFree: $totalDaysSmokeFree, relapseCount: $relapseCount, totalSlips: $totalSlips, todaySlips: $todaySlips, slipHistory: $slipHistory, lastSlipDate: $lastSlipDate, lastCheckInDate: $lastCheckInDate)';
   }
 
   @override
@@ -1204,6 +1263,8 @@ class _$ProgressSummaryImpl implements _ProgressSummary {
                 other.totalSlips == totalSlips) &&
             (identical(other.todaySlips, todaySlips) ||
                 other.todaySlips == todaySlips) &&
+            const DeepCollectionEquality()
+                .equals(other._slipHistory, _slipHistory) &&
             (identical(other.lastSlipDate, lastSlipDate) ||
                 other.lastSlipDate == lastSlipDate) &&
             (identical(other.lastCheckInDate, lastCheckInDate) ||
@@ -1222,6 +1283,7 @@ class _$ProgressSummaryImpl implements _ProgressSummary {
       relapseCount,
       totalSlips,
       todaySlips,
+      const DeepCollectionEquality().hash(_slipHistory),
       lastSlipDate,
       lastCheckInDate);
 
@@ -1252,6 +1314,7 @@ abstract class _ProgressSummary implements ProgressSummary {
           final int relapseCount,
           final int totalSlips,
           final int todaySlips,
+          final Map<String, dynamic> slipHistory,
           @TimestampConverter() final DateTime? lastSlipDate,
           @TimestampConverter() final DateTime? lastCheckInDate}) =
       _$ProgressSummaryImpl;
@@ -1275,6 +1338,8 @@ abstract class _ProgressSummary implements ProgressSummary {
   int get totalSlips;
   @override
   int get todaySlips;
+  @override
+  Map<String, dynamic> get slipHistory;
   @override
   @TimestampConverter()
   DateTime? get lastSlipDate;

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:fl_chart/fl_chart.dart';
 import '../../../core/constants/app_colors.dart';
 import '../viewmodels/dashboard_viewmodel.dart';
 import '../../../data/models/user_model.dart';
 import '../widgets/add_reward_modal.dart';
+import '../widgets/savings_history_modal.dart';
 
 class MoneyTrackerScreen extends ConsumerWidget {
   const MoneyTrackerScreen({super.key});
@@ -56,7 +58,7 @@ class _TrackerContent extends ConsumerWidget {
             padding: const EdgeInsets.only(bottom: 120.0), // Padding for bottom nav
             child: Column(
               children: [
-                _buildCumulativeSavings(ref),
+                _buildCumulativeSavings(context, ref),
                 _buildSavingsGrowth(ref),
                 _buildBuyThisInstead(context, ref),
               ],
@@ -118,7 +120,7 @@ class _TrackerContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildCumulativeSavings(WidgetRef ref) {
+  Widget _buildCumulativeSavings(BuildContext context, WidgetRef ref) {
     final moneySaved = ref.watch(moneySavedProvider);
     final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
 
@@ -149,14 +151,41 @@ class _TrackerContent extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'CUMULATIVE SAVINGS',
-              style: TextStyle(
-                color: AppColors.slate400,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 1.0,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'CUMULATIVE SAVINGS',
+                  style: TextStyle(
+                    color: AppColors.slate400,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => const SavingsHistoryModal(),
+                    );
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Icon(
+                      Icons.history,
+                      color: AppColors.primary,
+                      size: 16,
+                    ),
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             Row(
@@ -210,116 +239,9 @@ class _TrackerContent extends ConsumerWidget {
 
   Widget _buildSavingsGrowth(WidgetRef ref) {
     final moneySaved = ref.watch(moneySavedProvider);
-    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
-    final goal = user.savingsTarget?.targetPrice ?? 2000000.0; // Fallback mock 2 jt
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Savings Growth',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              const Text(
-                'Last 30 Days',
-                style: TextStyle(
-                  color: AppColors.slate400,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: AppColors.slate900.withOpacity(0.4),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.backgroundDark),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
-                  children: [
-                    Text(
-                      formatter.format(moneySaved),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -0.5,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Goal: ${formatter.format(goal)}',
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                SizedBox(
-                  height: 120,
-                  width: double.infinity,
-                  child: CustomPaint(
-                    painter: _GrowthChartPainter(),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text(
-                      'DAY 1',
-                      style: TextStyle(
-                        color: AppColors.slate500,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    Text(
-                      'DAY 15',
-                      style: TextStyle(
-                        color: AppColors.slate500,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                    Text(
-                      'TODAY',
-                      style: TextStyle(
-                        color: AppColors.slate500,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.0,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+    return SavingsGrowthChartSection(
+      user: user,
+      currentMoneySaved: moneySaved,
     );
   }
 
@@ -358,7 +280,10 @@ class _TrackerContent extends ConsumerWidget {
           ),
           const SizedBox(height: 16),
           if (hasTargets) ...[
-            ...allTargets.map((target) {
+            ...allTargets.asMap().entries.map((entry) {
+              final index = entry.key;
+              final target = entry.value;
+
               int progress = ((moneySaved / target.targetPrice) * 100).floor();
               if (progress > 100) progress = 100;
               
@@ -369,6 +294,23 @@ class _TrackerContent extends ConsumerWidget {
                   price: formatter.format(target.targetPrice),
                   icon: Icons.star_rounded,
                   progress: progress,
+                  onEdit: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.transparent,
+                      builder: (context) => Padding(
+                        padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom,
+                        ),
+                        child: AddRewardModal(
+                          index: index,
+                          initialName: target.itemName,
+                          initialPrice: target.targetPrice,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               );
             }),
@@ -460,12 +402,14 @@ class _TargetCard extends StatelessWidget {
   final String price;
   final IconData icon;
   final int progress;
+  final VoidCallback onEdit;
 
   const _TargetCard({
     required this.title,
     required this.price,
     required this.icon,
     required this.progress,
+    required this.onEdit,
   });
 
   @override
@@ -515,13 +459,26 @@ class _TargetCard extends StatelessWidget {
                   ),
                 ],
               ),
-              Text(
-                '$progress% Saved',
-                style: const TextStyle(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
+              Row(
+                children: [
+                  Text(
+                    '$progress% Saved',
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  InkWell(
+                    onTap: onEdit,
+                    borderRadius: BorderRadius.circular(16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Icon(Icons.more_vert, color: AppColors.slate400, size: 20),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -556,55 +513,277 @@ class _TargetCard extends StatelessWidget {
   }
 }
 
-class _GrowthChartPainter extends CustomPainter {
+enum TimeFilter {
+  oneDay(1, '1 Hari'),
+  sevenDays(7, '7 Hari'),
+  oneMonth(30, '1 Bulan'),
+  threeMonths(90, '3 Bulan'),
+  oneYear(365, '1 Tahun'),
+  all(9999, 'All');
+
+  final int days;
+  final String label;
+
+  const TimeFilter(this.days, this.label);
+}
+
+class SavingsGrowthChartSection extends ConsumerStatefulWidget {
+  final UserModel user;
+  final double currentMoneySaved;
+
+  const SavingsGrowthChartSection({
+    super.key,
+    required this.user,
+    required this.currentMoneySaved,
+  });
+
   @override
-  void paint(Canvas canvas, Size size) {
-    final Path path = Path();
-    
-    // Convert SVG path coordinates to relative sizes
-    path.moveTo(0, size.height * 0.8);
-    path.cubicTo(
-      size.width * 0.1, size.height * 0.73, 
-      size.width * 0.2, size.height * 0.53, 
-      size.width * 0.31, size.height * 0.6
-    );
-    path.cubicTo(
-      size.width * 0.52, size.height * 0.26, 
-      size.width * 0.62, size.height * 0.33, 
-      size.width * 0.83, size.height * 0.06
-    );
-    path.lineTo(size.width, size.height * 0.13);
+  ConsumerState<SavingsGrowthChartSection> createState() => _SavingsGrowthChartSectionState();
+}
 
-    // Paint the stroke
-    final Paint linePaint = Paint()
-      ..color = AppColors.primary
-      ..strokeWidth = 3
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round;
+class _SavingsGrowthChartSectionState extends ConsumerState<SavingsGrowthChartSection> {
+  TimeFilter _selectedFilter = TimeFilter.oneMonth; // default to 1 Bulan mapped loosely
 
-    canvas.drawPath(path, linePaint);
-
-    // Create the background gradient fill
-    final Path fillPath = Path.from(path);
-    fillPath.lineTo(size.width, size.height);
-    fillPath.lineTo(0, size.height);
-    fillPath.close();
-
-    final Rect colorBounds = Rect.fromLTRB(0, 0, size.width, size.height);
-    final Paint fillPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          AppColors.primary.withOpacity(0.3),
-          AppColors.primary.withOpacity(0.0),
-        ],
-      ).createShader(colorBounds)
-      ..style = PaintingStyle.fill;
-
-    canvas.drawPath(fillPath, fillPaint);
+  @override
+  void initState() {
+    super.initState();
+    _selectedFilter = TimeFilter.oneMonth;
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  Widget build(BuildContext context) {
+    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
+    final goal = widget.user.savingsTarget?.targetPrice ?? (widget.user.savingsTargets.isNotEmpty ? widget.user.savingsTargets.first.targetPrice : 2000000.0);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Savings Growth',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              DropdownButtonHideUnderline(
+                child: DropdownButton<TimeFilter>(
+                  value: _selectedFilter,
+                  dropdownColor: AppColors.slate900,
+                  icon: const Icon(Icons.keyboard_arrow_down, color: AppColors.slate400, size: 16),
+                  style: const TextStyle(
+                    color: AppColors.slate400,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  onChanged: (TimeFilter? newValue) {
+                    if (newValue != null) {
+                      setState(() {
+                        _selectedFilter = newValue;
+                      });
+                    }
+                  },
+                  items: TimeFilter.values.map<DropdownMenuItem<TimeFilter>>((TimeFilter value) {
+                    return DropdownMenuItem<TimeFilter>(
+                      value: value,
+                      child: Text(value.label),
+                    );
+                  }).toList(),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.slate900.withOpacity(0.4),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.backgroundDark),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  textBaseline: TextBaseline.alphabetic,
+                  children: [
+                    Text(
+                      formatter.format(widget.currentMoneySaved),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: -0.5,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Goal: ${formatter.format(goal)}',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 32),
+                SizedBox(
+                  height: 180,
+                  width: double.infinity,
+                  child: _buildChart(goal),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChart(double goal) {
+    if (widget.user.quitDate == null || widget.user.smokingProfile == null) {
+      return const Center(child: Text('Not enough data', style: TextStyle(color: AppColors.slate400)));
+    }
+
+    final history = ref.watch(dailySavingsHistoryProvider);
+    if (history.isEmpty) {
+      return const Center(child: Text('No history found', style: TextStyle(color: AppColors.slate400)));
+    }
+
+    List<FlSpot> spots = [];
+    List<String> xLabels = [];
+
+    int daysToLookBack = _selectedFilter.days;
+    // Safety check, don't look back further than we have data
+    if (daysToLookBack > history.length) {
+      daysToLookBack = history.length;
+    }
+
+    // Get the sublist of the history based on the lookback window
+    final windowData = history.sublist(history.length - daysToLookBack);
+
+    double currentCumSum = 0;
+    
+    for (int i = 0; i < windowData.length; i++) {
+      final entry = windowData[i];
+      currentCumSum = entry.cumulativeTotal;
+      spots.add(FlSpot(i.toDouble(), currentCumSum));
+
+      // Build labels
+      if (i == 0) {
+        xLabels.add("${entry.date.day}/${entry.date.month}");
+      } else if (i == windowData.length - 1) {
+        xLabels.add('Hari ini'); // Today
+      } else if (windowData.length > 7 && i % (windowData.length ~/ 4) == 0) {
+        xLabels.add("${entry.date.day}/${entry.date.month}");
+      } else {
+         xLabels.add('');
+      }
+    }
+
+    // Edge case empty fallback
+    if (spots.isEmpty) {
+       spots.add(const FlSpot(0, 0));
+       xLabels.add('Hari ini');
+    }
+
+    // maxY dynamically maps to goal or current total, whichever is larger
+    double maxY = goal;
+    if (currentCumSum > maxY) maxY = currentCumSum * 1.2;
+    if (maxY == 0) maxY = 10000;
+
+    return LineChart(
+      LineChartData(
+        gridData: FlGridData(
+          show: true,
+          drawVerticalLine: false,
+          horizontalInterval: maxY / 4,
+          getDrawingHorizontalLine: (value) {
+            return FlLine(
+              color: AppColors.slate800,
+              strokeWidth: 1,
+              dashArray: [5, 5],
+            );
+          },
+        ),
+        titlesData: FlTitlesData(
+          show: true,
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 30,
+              interval: 1,
+              getTitlesWidget: (value, meta) {
+                final index = value.toInt();
+                if (index < 0 || index >= xLabels.length) return const SizedBox();
+                final text = xLabels[index];
+                if (text.isEmpty) return const SizedBox();
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    text,
+                    style: const TextStyle(
+                      color: AppColors.slate500,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: false,
+            ),
+          ),
+        ),
+        borderData: FlBorderData(show: false),
+        minX: 0,
+        maxX: (spots.length - 1).toDouble(),
+        minY: 0,
+        maxY: maxY,
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: false, // Make it jagged to show slips clearly
+            color: AppColors.primary,
+            barWidth: 3,
+            isStrokeCapRound: true,
+            dotData: FlDotData(
+               show: true,
+               getDotPainter: (spot, percent, barData, index) {
+                 return FlDotCirclePainter(
+                   radius: 4,
+                   color: AppColors.backgroundDark,
+                   strokeWidth: 2,
+                   strokeColor: AppColors.primary,
+                 );
+               },
+            ),
+            belowBarData: BarAreaData(
+              show: true,
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [
+                  AppColors.primary.withAlpha(80),
+                  AppColors.primary.withAlpha(0),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }

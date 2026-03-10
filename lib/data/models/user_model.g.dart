@@ -74,6 +74,8 @@ _$SmokingProfileImpl _$$SmokingProfileImplFromJson(Map<String, dynamic> json) =>
       cigarettesPerPack: (json['cigarettesPerPack'] as num?)?.toInt() ?? 0,
       cigarettesPerDay: (json['cigarettesPerDay'] as num?)?.toInt() ?? 0,
       yearsSmoking: (json['yearsSmoking'] as num?)?.toInt() ?? 0,
+      profileHistory: json['profileHistory'] as Map<String, dynamic>? ??
+          const <String, dynamic>{},
     );
 
 Map<String, dynamic> _$$SmokingProfileImplToJson(
@@ -85,6 +87,7 @@ Map<String, dynamic> _$$SmokingProfileImplToJson(
       'cigarettesPerPack': instance.cigarettesPerPack,
       'cigarettesPerDay': instance.cigarettesPerDay,
       'yearsSmoking': instance.yearsSmoking,
+      'profileHistory': instance.profileHistory,
     };
 
 _$SavingsTargetImpl _$$SavingsTargetImplFromJson(Map<String, dynamic> json) =>
@@ -112,6 +115,8 @@ _$ProgressSummaryImpl _$$ProgressSummaryImplFromJson(
       relapseCount: (json['relapseCount'] as num?)?.toInt() ?? 0,
       totalSlips: (json['totalSlips'] as num?)?.toInt() ?? 0,
       todaySlips: (json['todaySlips'] as num?)?.toInt() ?? 0,
+      slipHistory: json['slipHistory'] as Map<String, dynamic>? ??
+          const <String, dynamic>{},
       lastSlipDate: _$JsonConverterFromJson<Timestamp, DateTime>(
           json['lastSlipDate'], const TimestampConverter().fromJson),
       lastCheckInDate: _$JsonConverterFromJson<Timestamp, DateTime>(
@@ -129,6 +134,7 @@ Map<String, dynamic> _$$ProgressSummaryImplToJson(
       'relapseCount': instance.relapseCount,
       'totalSlips': instance.totalSlips,
       'todaySlips': instance.todaySlips,
+      'slipHistory': instance.slipHistory,
       'lastSlipDate': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.lastSlipDate, const TimestampConverter().toJson),
       'lastCheckInDate': _$JsonConverterToJson<Timestamp, DateTime>(

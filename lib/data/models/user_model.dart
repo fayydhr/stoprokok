@@ -54,6 +54,7 @@ class SmokingProfile with _$SmokingProfile {
     @Default(0) int cigarettesPerPack,
     @Default(0) int cigarettesPerDay,
     @Default(0) int yearsSmoking,
+    @Default(<String, dynamic>{}) Map<String, dynamic> profileHistory,
   }) = _SmokingProfile;
 
   factory SmokingProfile.fromJson(Map<String, dynamic> json) =>
@@ -83,6 +84,7 @@ class ProgressSummary with _$ProgressSummary {
     @Default(0) int relapseCount,
     @Default(0) int totalSlips,
     @Default(0) int todaySlips,
+    @Default(<String, dynamic>{}) Map<String, dynamic> slipHistory,
     @TimestampConverter() DateTime? lastSlipDate,
 
     @TimestampConverter()

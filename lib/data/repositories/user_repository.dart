@@ -44,6 +44,6 @@ class UserRepository {
     await _firestore
         .collection('users')
         .doc(uid)
-        .set(userWithId.toJson(), SetOptions(merge: true));
+        .set(userWithId.toJson());
   }
 }
