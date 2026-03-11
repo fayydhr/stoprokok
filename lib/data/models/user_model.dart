@@ -39,6 +39,8 @@ class UserModel with _$UserModel {
     DateTime? quitDate,
 
     ProgressSummary? progressSummary,
+    
+    @Default('IDR') String currency, // Default to Indonesian Rupiah
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) =>

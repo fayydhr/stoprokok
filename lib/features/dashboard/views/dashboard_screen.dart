@@ -7,6 +7,8 @@ import '../../../core/constants/app_colors.dart';
 import '../widgets/log_slip_modal.dart';
 import 'cigarette_log_screen.dart';
 import 'money_tracker_screen.dart';
+import 'profile_screen.dart';
+import '../../../core/utils/currency_formatter.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
@@ -39,9 +41,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             children: [
               _DashboardContent(user: user),
               const MoneyTrackerScreen(),
-              const CigaretteLogScreen(), // Replaced Groups with CigaretteLogScreen
-              // Placeholder for Profile
-              const Center(child: Text('Profile', style: TextStyle(color: Colors.white))),
+              CigaretteLogScreen(), // Replaced Groups with CigaretteLogScreen
+              const ProfileScreen(),
             ],
           );
         },
@@ -89,8 +90,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ),
                   const SizedBox(width: 56), // Space for Add button
                   _NavBarItem(
-                    icon: Icons.smoking_rooms, // Changed from Groups outline to Smoking rooms
-                    label: 'Rokok', // Changed from Social to Rokok
+                    icon: Icons.smoking_rooms,
+                    label: 'Cigarette',
                     isSelected: _currentIndex == 2,
                     onTap: () => setState(() => _currentIndex = 2),
                   ),
@@ -209,8 +210,8 @@ class _DashboardContent extends ConsumerWidget {
                 _buildTodaysSlips(context, ref),
                 _buildCurrentStreak(ref),
                 _buildQuoteSection(),
-                _buildStatsGrid(ref),
-                _buildHealthRecovery(),
+                _buildStatsGrid(ref, user),
+                _buildHealthRecovery(ref),
                 _buildLogCigarette(context),
                 _buildCravingsResistedBanner(),
               ],
@@ -497,10 +498,10 @@ class _DashboardContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsGrid(WidgetRef ref) {
+  Widget _buildStatsGrid(WidgetRef ref, UserModel user) {
     final avoided = ref.watch(cigarettesAvoidedProvider);
     final moneySaved = ref.watch(moneySavedProvider);
-    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
+    final formatter = CurrencyFormatter.getFormatter(user.currency);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -584,7 +585,11 @@ class _DashboardContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildHealthRecovery() {
+  Widget _buildHealthRecovery(WidgetRef ref) {
+    final healthStatus = ref.watch(healthRecoveryProvider);
+    final int displayPercentage = healthStatus.progressPercentage.floor();
+    final double progressValue = healthStatus.progressPercentage / 100.0;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Container(
@@ -596,10 +601,10 @@ class _DashboardContent extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
+                const Row(
                   children: [
                     Icon(Icons.air, color: AppColors.primary, size: 20),
                     SizedBox(width: 8),
@@ -615,8 +620,8 @@ class _DashboardContent extends ConsumerWidget {
                   ],
                 ),
                 Text(
-                  '84%',
-                  style: TextStyle(
+                  '$displayPercentage%',
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w900,
                     color: AppColors.primary,
@@ -632,48 +637,48 @@ class _DashboardContent extends ConsumerWidget {
                   width: 96,
                   height: 96,
                   child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: CircularProgressIndicator(
-                          value: 1.0,
-                          strokeWidth: 8,
-                          color: Colors.white.withOpacity(0.05),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 80,
-                        height: 80,
-                        child: CircularProgressIndicator(
-                          value: 0.84,
-                          strokeWidth: 8,
-                          color: AppColors.primary,
-                          strokeCap: StrokeCap.round,
-                        ),
-                      ),
-                      const Icon(Icons.air, color: AppColors.primary, size: 24),
-                    ],
+                     alignment: Alignment.center,
+                     children: [
+                       SizedBox(
+                         width: 80,
+                         height: 80,
+                         child: CircularProgressIndicator(
+                           value: 1.0,
+                           strokeWidth: 8,
+                           color: Colors.white.withOpacity(0.05),
+                         ),
+                       ),
+                       SizedBox(
+                         width: 80,
+                         height: 80,
+                         child: CircularProgressIndicator(
+                           value: progressValue,
+                           strokeWidth: 8,
+                           color: AppColors.primary,
+                           strokeCap: StrokeCap.round,
+                         ),
+                       ),
+                       const Icon(Icons.favorite, color: AppColors.primary, size: 24),
+                     ],
                   ),
                 ),
                 const SizedBox(width: 24),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Lung Capacity',
-                        style: TextStyle(
+                        healthStatus.currentTitle,
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                           color: AppColors.slate200,
                         ),
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
-                        'Your lungs are beginning to clear and breathing is becoming easier every day.',
-                        style: TextStyle(
+                        healthStatus.currentDescription,
+                        style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.slate400,
                           height: 1.5,

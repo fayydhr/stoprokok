@@ -210,6 +210,212 @@ final todaysSlipsProvider = Provider.autoDispose<int>((ref) {
   return (user!.progressSummary!.slipHistory[dateKey] as num?)?.toInt() ?? 0;
 });
 
+class HealthMilestone {
+  final Duration durationLabel;
+  final double percentage;
+  final String title;
+  final String description;
+
+  const HealthMilestone({
+    required this.durationLabel,
+    required this.percentage,
+    required this.title,
+    required this.description,
+  });
+}
+
+final List<HealthMilestone> _healthMilestones = const [
+  HealthMilestone(
+    durationLabel: Duration(minutes: 20),
+    percentage: 1.0,
+    title: 'Blood Pressure & Heart Rate',
+    description: 'Blood pressure and heart rate return to normal.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(hours: 8),
+    percentage: 5.0,
+    title: 'Oxygen Levels Rise',
+    description: 'Carbon monoxide (CO) levels drop by 50%. Oxygen levels rise.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(hours: 24),
+    percentage: 10.0,
+    title: 'Clearing Lungs',
+    description: 'CO is completely eliminated. Lungs begin clearing out mucus.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(hours: 48),
+    percentage: 15.0,
+    title: 'Senses Improving',
+    description: 'Nicotine is fully gone. Sense of taste and smell sharply improve.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(hours: 72),
+    percentage: 25.0,
+    title: 'Easier Breathing',
+    description: 'Bronchial tubes relax. Breathing becomes significantly easier.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(days: 14),
+    percentage: 35.0,
+    title: 'Blood Circulation',
+    description: 'Blood circulation improves. Physical nicotine withdrawal symptoms usually pass.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(days: 30),
+    percentage: 45.0,
+    title: 'Cilia Regrowth',
+    description: 'Coughing decreases. Cilia (tiny lung hairs) start to regrow.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(days: 90),
+    percentage: 60.0,
+    title: 'Increased Lung Capacity',
+    description: 'Lung capacity increases by up to 10%. You can inhale much more air.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(days: 365), // 1 year
+    percentage: 75.0,
+    title: 'Lower Heart Attack Risk',
+    description: 'Risk of heart attack drops by up to 50% compared to a smoker.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(days: 365 * 5), // 5 years
+    percentage: 85.0,
+    title: 'Lower Stroke Risk',
+    description: 'Risk of stroke decreases significantly, nearing that of a non-smoker.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(days: 365 * 10), // 10 years
+    percentage: 95.0,
+    title: 'Lower Lung Cancer Risk',
+    description: 'Risk of lung cancer drops to half that of a smoker.',
+  ),
+  HealthMilestone(
+    durationLabel: Duration(days: 365 * 15), // 15 years
+    percentage: 100.0,
+    title: 'Fully Recovered',
+    description: 'Body is clinically recovered. Risk of heart attack is now the same as a non-smoker.',
+  ),
+];
+
+class HealthRecoveryStatus {
+  final double progressPercentage; // 0.0 to 100.0
+  final String currentTitle;
+  final String currentDescription;
+
+  const HealthRecoveryStatus({
+    required this.progressPercentage,
+    required this.currentTitle,
+    required this.currentDescription,
+  });
+}
+
+// Helper provider for health recovery logic
+final healthRecoveryProvider = Provider.autoDispose<HealthRecoveryStatus>((ref) {
+  final user = ref.watch(userStreamProvider).value;
+  if (user?.quitDate == null) {
+    return const HealthRecoveryStatus(
+      progressPercentage: 0.0,
+      currentTitle: 'Beginning the Journey',
+      currentDescription: 'Your health will begin to improve 20 minutes after quitting.',
+    );
+  }
+
+  final quitDate = user!.quitDate!;
+  final now = DateTime.now();
+  
+  // To avoid logic issues, recovery reset shouldn't just be streak based (meaning slipping once doesn't reset 10 years of progress to 0) 
+  // BUT for a simple approach consistent with "streak" tracking, we can reset the clock on slips.
+  // The simplest is purely using the current streak days/hours without slips.
+  final slipHistory = user.progressSummary?.slipHistory ?? {};
+  
+  DateTime? latestSlip;
+  final sortedKeys = slipHistory.keys.toList()..sort();
+  for (final key in sortedKeys.reversed) {
+    if ((slipHistory[key] as num?)?.toInt() != 0) {
+      final parts = key.split('-');
+      if (parts.length == 3) {
+        latestSlip = DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]), 23, 59, 59); // assumes end of day
+      }
+      break;
+    }
+  }
+
+  // Baseline time since we started (clean duration)
+  DateTime effectiveStartDate = quitDate;
+  if (latestSlip != null && latestSlip.isAfter(quitDate)) {
+    effectiveStartDate = latestSlip;
+  }
+  
+  if (now.isBefore(effectiveStartDate)) {
+      return const HealthRecoveryStatus(
+        progressPercentage: 0.0,
+        currentTitle: 'Beginning the Journey',
+        currentDescription: 'Your health will begin to improve 20 minutes after quitting.',
+      );
+  }
+
+  final durationSinceClean = now.difference(effectiveStartDate);
+
+  HealthMilestone? currentMilestone;
+  HealthMilestone? nextMilestone;
+
+  for (int i = 0; i < _healthMilestones.length; i++) {
+    if (durationSinceClean >= _healthMilestones[i].durationLabel) {
+      currentMilestone = _healthMilestones[i];
+    } else {
+      nextMilestone = _healthMilestones[i];
+      break;
+    }
+  }
+
+  // Defaults if haven't passed the first milestone
+  if (currentMilestone == null && nextMilestone != null) {
+     double fraction = durationSinceClean.inMinutes / nextMilestone.durationLabel.inMinutes;
+     double progress = 0.0 + (fraction * nextMilestone.percentage);
+     return HealthRecoveryStatus(
+       progressPercentage: progress.clamp(0.0, 100.0),
+       currentTitle: nextMilestone.title,
+       currentDescription: nextMilestone.description,
+     );
+  }
+
+  // Reached end of milestones
+  if (currentMilestone != null && nextMilestone == null) {
+      return HealthRecoveryStatus(
+        progressPercentage: 100.0,
+        currentTitle: currentMilestone.title,
+        currentDescription: currentMilestone.description,
+      );
+  }
+
+  // Calculate interpolation between current and next milestone
+  if (currentMilestone != null && nextMilestone != null) {
+     final totalDurationBetween = nextMilestone.durationLabel.inSeconds - currentMilestone.durationLabel.inSeconds;
+     final durationPassedBetween = durationSinceClean.inSeconds - currentMilestone.durationLabel.inSeconds;
+     
+     // interpolation factor 0 to 1
+     final double fraction = (durationPassedBetween / totalDurationBetween).clamp(0.0, 1.0);
+     
+     // interpolate percentage
+     final progressSpan = nextMilestone.percentage - currentMilestone.percentage;
+     final interpolatedProgress = currentMilestone.percentage + (fraction * progressSpan);
+
+     return HealthRecoveryStatus(
+       progressPercentage: interpolatedProgress.clamp(0.0, 100.0),
+       currentTitle: currentMilestone.title,
+       currentDescription: currentMilestone.description,
+     );
+  }
+
+  return const HealthRecoveryStatus(
+      progressPercentage: 0.0,
+      currentTitle: 'Beginning the Journey',
+      currentDescription: 'Your health will begin to improve 20 minutes after quitting.',
+  );
+});
+
 // Actions
 final dashboardActionsProvider = Provider.autoDispose((ref) {
   return DashboardActions(ref.watch(userRepositoryProvider), ref.watch(userStreamProvider).value);
@@ -349,6 +555,16 @@ class DashboardActions {
 
       final updatedUser = user!.copyWith(savingsTargets: newTargets);
       await repo.saveUserData(updatedUser);
+    }
+  }
+
+  Future<void> updateCurrency(String newCurrency) async {
+    if (user == null) return;
+    try {
+      final updatedUser = user!.copyWith(currency: newCurrency);
+      await repo.saveUserData(updatedUser);
+    } catch (e) {
+      print('Error updating currency: $e');
     }
   }
 

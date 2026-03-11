@@ -34,6 +34,7 @@ mixin _$UserModel {
   @TimestampConverter()
   DateTime? get quitDate => throw _privateConstructorUsedError;
   ProgressSummary? get progressSummary => throw _privateConstructorUsedError;
+  String get currency => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -61,7 +62,8 @@ abstract class $UserModelCopyWith<$Res> {
       SavingsTarget? savingsTarget,
       List<SavingsTarget> savingsTargets,
       @TimestampConverter() DateTime? quitDate,
-      ProgressSummary? progressSummary});
+      ProgressSummary? progressSummary,
+      String currency});
 
   $SmokingProfileCopyWith<$Res>? get smokingProfile;
   $SavingsTargetCopyWith<$Res>? get savingsTarget;
@@ -94,6 +96,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? savingsTargets = null,
     Object? quitDate = freezed,
     Object? progressSummary = freezed,
+    Object? currency = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -140,6 +143,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.progressSummary
           : progressSummary // ignore: cast_nullable_to_non_nullable
               as ProgressSummary?,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -205,7 +212,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       SavingsTarget? savingsTarget,
       List<SavingsTarget> savingsTargets,
       @TimestampConverter() DateTime? quitDate,
-      ProgressSummary? progressSummary});
+      ProgressSummary? progressSummary,
+      String currency});
 
   @override
   $SmokingProfileCopyWith<$Res>? get smokingProfile;
@@ -239,6 +247,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? savingsTargets = null,
     Object? quitDate = freezed,
     Object? progressSummary = freezed,
+    Object? currency = null,
   }) {
     return _then(_$UserModelImpl(
       id: null == id
@@ -285,6 +294,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.progressSummary
           : progressSummary // ignore: cast_nullable_to_non_nullable
               as ProgressSummary?,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -303,7 +316,8 @@ class _$UserModelImpl implements _UserModel {
       this.savingsTarget,
       final List<SavingsTarget> savingsTargets = const [],
       @TimestampConverter() this.quitDate,
-      this.progressSummary})
+      this.progressSummary,
+      this.currency = 'IDR'})
       : _quitReasons = quitReasons,
         _savingsTargets = savingsTargets;
 
@@ -350,10 +364,13 @@ class _$UserModelImpl implements _UserModel {
   final DateTime? quitDate;
   @override
   final ProgressSummary? progressSummary;
+  @override
+  @JsonKey()
+  final String currency;
 
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, email: $email, createdAt: $createdAt, smokingProfile: $smokingProfile, quitReasons: $quitReasons, customQuitReason: $customQuitReason, savingsTarget: $savingsTarget, savingsTargets: $savingsTargets, quitDate: $quitDate, progressSummary: $progressSummary)';
+    return 'UserModel(id: $id, name: $name, email: $email, createdAt: $createdAt, smokingProfile: $smokingProfile, quitReasons: $quitReasons, customQuitReason: $customQuitReason, savingsTarget: $savingsTarget, savingsTargets: $savingsTargets, quitDate: $quitDate, progressSummary: $progressSummary, currency: $currency)';
   }
 
   @override
@@ -379,7 +396,9 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.quitDate, quitDate) ||
                 other.quitDate == quitDate) &&
             (identical(other.progressSummary, progressSummary) ||
-                other.progressSummary == progressSummary));
+                other.progressSummary == progressSummary) &&
+            (identical(other.currency, currency) ||
+                other.currency == currency));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -396,7 +415,8 @@ class _$UserModelImpl implements _UserModel {
       savingsTarget,
       const DeepCollectionEquality().hash(_savingsTargets),
       quitDate,
-      progressSummary);
+      progressSummary,
+      currency);
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -426,7 +446,8 @@ abstract class _UserModel implements UserModel {
       final SavingsTarget? savingsTarget,
       final List<SavingsTarget> savingsTargets,
       @TimestampConverter() final DateTime? quitDate,
-      final ProgressSummary? progressSummary}) = _$UserModelImpl;
+      final ProgressSummary? progressSummary,
+      final String currency}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -456,6 +477,8 @@ abstract class _UserModel implements UserModel {
   DateTime? get quitDate;
   @override
   ProgressSummary? get progressSummary;
+  @override
+  String get currency;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

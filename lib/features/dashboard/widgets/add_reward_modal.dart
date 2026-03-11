@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/constants/app_colors.dart';
 import '../viewmodels/dashboard_viewmodel.dart';
+import '../../../core/utils/currency_formatter.dart';
 import 'package:intl/intl.dart';
 
 class AddRewardModal extends ConsumerStatefulWidget {
@@ -158,61 +159,76 @@ class _AddRewardModalState extends ConsumerState<AddRewardModal> {
                     ),
                   ),
                   const SizedBox(height: 24),
-                  const Text(
-                    'TARGET PRICE (IDR)',
-                    style: TextStyle(
-                      color: AppColors.slate300,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 1.0,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Container(
-                    height: 56,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withValues(alpha: 0.05),
-                      border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 16.0, right: 8.0),
-                          child: Text(
-                            'Rp',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            controller: _priceController,
-                            keyboardType: TextInputType.number,
+                  Consumer(
+                    builder: (context, ref, child) {
+                      final user = ref.watch(userStreamProvider).value;
+                      final currencyCode = user?.currency ?? 'IDR';
+                      final symbol = CurrencyFormatter.getFormatter(currencyCode).currencySymbol;
+
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'TARGET PRICE ($currencyCode)',
                             style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              color: AppColors.slate300,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 1.0,
                             ),
-                            decoration: InputDecoration(
-                              hintText: '0',
-                              hintStyle: TextStyle(color: AppColors.slate500.withOpacity(0.5)),
-                              border: InputBorder.none,
-                            ),
-                            onChanged: (val) {
-                              setState(() {
-                                // Simple string replace to handle formatting if needed later
-                                final cleanVal = val.replaceAll(RegExp(r'[^0-9]'), '');
-                                _targetPrice = double.tryParse(cleanVal) ?? 0.0;
-                              });
-                            },
                           ),
-                        ),
-                      ],
-                    ),
+                          const SizedBox(height: 8),
+                          Container(
+                            height: 56,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary.withValues(alpha: 0.05),
+                              border: Border.all(color: AppColors.primary.withValues(alpha: 0.2)),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 16.0, right: 8.0),
+                                  child: Text(
+                                    symbol.trim(),
+                                    style: const TextStyle(
+                                      color: AppColors.primary,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _priceController,
+                                    keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      CurrencyInputFormatter(currencyCode: currencyCode),
+                                    ],
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    decoration: InputDecoration(
+                                      hintText: '0',
+                                      hintStyle: TextStyle(color: AppColors.slate500.withOpacity(0.5)),
+                                      border: InputBorder.none,
+                                    ),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        final cleanVal = val.replaceAll(RegExp(r'[^0-9]'), '');
+                                        _targetPrice = double.tryParse(cleanVal) ?? 0.0;
+                                      });
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),

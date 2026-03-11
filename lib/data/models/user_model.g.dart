@@ -36,6 +36,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
           ? null
           : ProgressSummary.fromJson(
               json['progressSummary'] as Map<String, dynamic>),
+      currency: json['currency'] as String? ?? 'IDR',
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -52,6 +53,7 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'quitDate': _$JsonConverterToJson<Timestamp, DateTime>(
           instance.quitDate, const TimestampConverter().toJson),
       'progressSummary': instance.progressSummary?.toJson(),
+      'currency': instance.currency,
     };
 
 Value? _$JsonConverterFromJson<Json, Value>(

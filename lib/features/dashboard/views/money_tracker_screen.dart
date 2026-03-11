@@ -7,6 +7,7 @@ import '../viewmodels/dashboard_viewmodel.dart';
 import '../../../data/models/user_model.dart';
 import '../widgets/add_reward_modal.dart';
 import '../widgets/savings_history_modal.dart';
+import '../../../core/utils/currency_formatter.dart';
 
 class MoneyTrackerScreen extends ConsumerWidget {
   const MoneyTrackerScreen({super.key});
@@ -58,9 +59,9 @@ class _TrackerContent extends ConsumerWidget {
             padding: const EdgeInsets.only(bottom: 120.0), // Padding for bottom nav
             child: Column(
               children: [
-                _buildCumulativeSavings(context, ref),
-                _buildSavingsGrowth(ref),
-                _buildBuyThisInstead(context, ref),
+                _buildCumulativeSavings(context, ref, user),
+                _buildSavingsGrowth(ref, user),
+                _buildBuyThisInstead(context, ref, user),
               ],
             ),
           ),
@@ -120,9 +121,9 @@ class _TrackerContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildCumulativeSavings(BuildContext context, WidgetRef ref) {
+  Widget _buildCumulativeSavings(BuildContext context, WidgetRef ref, UserModel user) {
     final moneySaved = ref.watch(moneySavedProvider);
-    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
+    final formatter = CurrencyFormatter.getFormatter(user.currency);
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
@@ -206,9 +207,9 @@ class _TrackerContent extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Text(
-                  'IDR',
-                  style: TextStyle(
+                Text(
+                  user.currency,
+                  style: const TextStyle(
                     color: AppColors.primary,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -237,7 +238,7 @@ class _TrackerContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildSavingsGrowth(WidgetRef ref) {
+  Widget _buildSavingsGrowth(WidgetRef ref, UserModel user) {
     final moneySaved = ref.watch(moneySavedProvider);
     return SavingsGrowthChartSection(
       user: user,
@@ -245,11 +246,11 @@ class _TrackerContent extends ConsumerWidget {
     );
   }
 
-  Widget _buildBuyThisInstead(BuildContext context, WidgetRef ref) {
+  Widget _buildBuyThisInstead(BuildContext context, WidgetRef ref, UserModel user) {
     final moneySaved = ref.watch(moneySavedProvider);
     final targets = user.savingsTargets;
     final legacyTarget = user.savingsTarget; // For users who haven't added a new target yet
-    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
+    final formatter = CurrencyFormatter.getFormatter(user.currency);
     
     // Combine newest list targets and fallback legacy target to display
     final allTargets = <SavingsTarget>[...targets];
@@ -552,7 +553,7 @@ class _SavingsGrowthChartSectionState extends ConsumerState<SavingsGrowthChartSe
 
   @override
   Widget build(BuildContext context) {
-    final formatter = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0);
+    final formatter = CurrencyFormatter.getFormatter(widget.user.currency);
     final goal = widget.user.savingsTarget?.targetPrice ?? (widget.user.savingsTargets.isNotEmpty ? widget.user.savingsTargets.first.targetPrice : 2000000.0);
 
     return Padding(
