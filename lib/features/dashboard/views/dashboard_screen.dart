@@ -7,7 +7,7 @@ import '../../../core/constants/app_colors.dart';
 import '../widgets/log_slip_modal.dart';
 import 'cigarette_log_screen.dart';
 import 'money_tracker_screen.dart';
-import 'profile_screen.dart';
+import 'craving_breathe_screen.dart';
 import '../../../core/utils/currency_formatter.dart';
 
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -42,7 +42,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               _DashboardContent(user: user),
               const MoneyTrackerScreen(),
               CigaretteLogScreen(), // Replaced Groups with CigaretteLogScreen
-              const ProfileScreen(),
+              const CravingBreatheScreen(), // Replaced Profile with Breathing Screen
             ],
           );
         },
@@ -96,8 +96,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     onTap: () => setState(() => _currentIndex = 2),
                   ),
                   _NavBarItem(
-                    icon: Icons.person_outline,
-                    label: 'Profile',
+                    icon: Icons.self_improvement_outlined,
+                    label: 'Breathe',
                     isSelected: _currentIndex == 3,
                     onTap: () => setState(() => _currentIndex = 3),
                   ),
